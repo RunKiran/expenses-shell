@@ -71,9 +71,9 @@ VALIDATE $? "installation of nodejs dependencies"
 systemctl daemon-reload
 
 VALIDATE $? "deamon-reloaded"
-systemctl enable backend
+systemctl enable backend.service
 VALIDATE $? "enabled backend"
-systemctl start backend
+systemctl start backend.service
 VALIDATE $? "started backend"
 
 # we need to install mysql client
@@ -84,5 +84,5 @@ VALIDATE $? "installation of mysql-client"
 mysql -h 172.31.84.211 -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
 
 #Restart the service &>>$LOGFILE
-systemctl restart backend
+systemctl restart backend.service
 VALIDATE $? "restarting backend"
