@@ -29,19 +29,50 @@ VALIDATE(){
           
     fi      
 }
-#list modules
-dnf module list
-VALIDATE $? "list of modules"
-dnf module disable nodejs -y
+
+
+dnf module disable nodejs -y &>>$LOGFILE
 VALIDATE $? "disabled  modules"
-dnf module enable nodejs:20 -y
+
+dnf module enable nodejs:20 -y &>>$LOGFILE
 VALIDATE $? "enaabled  module20"
-dnf install nodejs -y
+
+dnf install nodejs -y &>>$LOGFILE
 VALIDATE $? "installation of Nodejs"
-useradd expense
-mkdir /app
-curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip
-cd /app
-unzip /tmp/backend.zip
-cd /app
-npm install
+
+useradd expense &>>$LOGFILE
+if [ $? -ne 0 ]
+then
+    useradd expense &>>$LOGFILE
+    VALIDATE $? "Creating expense user"
+else
+    echo -e "Expense user already created...$Y SKIPPING $N"
+fi
+
+mkdir /app &>>$LOGFILE
+VALIDATE $? "creating app directory"
+
+curl -o /tmp/backend.zip https://expense-builds.s3.us-east-1.amazonaws.com/expense-backend-v2.zip &>>$LOGFILE
+VALIDATE $? "downloading backend code"
+
+cd /app 
+unzip /tmp/backend.zip &>>$LOGFILE
+VALIDATE $? "extracting backend code"
+cd /app 
+npm install &>>$LOGFILE
+
+VALIDATE $? "installation of nodejs dependencies"
+systemctl daemon-reload
+systemctl enable backend
+systemctl start backend
+
+# we need to install mysql client
+dnf install mysql -y &>>$LOGFILE
+VALIDATE $? "installation of mysql-client"
+
+#Load Schema
+mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
+
+#Restart the service
+systemctl restart backend
+VALIDATE $? "restarting backend"
