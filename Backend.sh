@@ -65,12 +65,16 @@ cd /app
 npm install &>>$LOGFILE
 
 #coping backend file 
-cp /home/ec2-user/expenses-shell  /etc/systemd/system/backend.service &>>$LOGFILE
+cp /home/ec2-user/expenses-shell/backend.service /etc/systemd/system/backend.service &>>$LOGFILE
 
 VALIDATE $? "installation of nodejs dependencies"
 systemctl daemon-reload
+
+VALIDATE $? "deamon-reloaded"
 systemctl enable backend
+VALIDATE $? "enabled backend"
 systemctl start backend
+VALIDATE $? "started backend"
 
 # we need to install mysql client
 dnf install mysql -y &>>$LOGFILE
