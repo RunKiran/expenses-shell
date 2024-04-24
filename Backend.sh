@@ -77,7 +77,7 @@ dnf install mysql -y &>>$LOGFILE
 VALIDATE $? "installation of mysql-client"
 
 #Load Schema
-mysql -h <172.31.84.211> -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
+mysql -h 172.31.84.211 -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
 
 #Restart the service &>>$LOGFILE
 systemctl restart backend
