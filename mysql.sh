@@ -20,24 +20,25 @@ VALIDATE(){
     if [ $1 -ne 0 ]
     then    
         echo -e "$2..$R failed $N"
+        exit 1
     else
         echo -e "$2..$G Success $N"
-    exit 1      
+          
     fi      
 }
 #Install MySQL Server 8.0.x
 
-dnf install mysql-server -y
+dnf install mysql-server -y &>>$LOGFILE
 VALIDATE $? "Installation of MySql"
 
 #Start MySQL Service
 
-systemctl enable mysqld
+systemctl enable mysqld &>>$LOGFILE
 VALIDATE $? "enabled  of MySql"
 
-systemctl start mysqld
+systemctl start mysqld &>>$LOGFILE
 VALIDATE $? "starting  of MySql"
 
 #We need to change the default root password in order to start using the database service. Use password ExpenseApp@1 or any other as per your choice.
-mysql_secure_installation --set-root-pass ExpenseApp@1
-VALIDATE $? "ssetting up root passwd"
+mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
+VALIDATE $? "setting up root passwd"
