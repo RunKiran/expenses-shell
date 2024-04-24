@@ -46,7 +46,8 @@ VALIDATE $? "starting  of MySql"
 #We need to change the default root password in order to start using the database service. Use password ExpenseApp@1 or any other as per your choice.
 # mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
 # VALIDATE $? "setting up root passwd"
-mysql -h db.daws78s.online -uroot -pExpenseApp@1 -e 'SHOW DATABASES;' &>>$LOGFILE
+
+mysql -h db.mkaws.online -uroot -pExpenseApp@1 -e 'SHOW DATABASES;' &>>$LOGFILE
 if [ $? -ne 0 ]
 then
     mysql_secure_installation --set-root-pass ${mysql_root_password} &>>$LOGFILE
