@@ -47,7 +47,7 @@ VALIDATE $? "starting  of MySql"
 # mysql_secure_installation --set-root-pass ExpenseApp@1 &>>$LOGFILE
 # VALIDATE $? "setting up root passwd"
 
-mysql -h mkaws.online -uroot -p${mysql_root_password} -e 'SHOW DATABASES;' &>>$LOGFILE
+mysql -h db.mkaws.online -uroot -p${mysql_root_password} -e 'SHOW DATABASES;' &>>$LOGFILE
 if [ $? -ne 0 ]
 then
     mysql_secure_installation --set-root-pass ${mysql_root_password} &>>$LOGFILE

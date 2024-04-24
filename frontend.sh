@@ -42,7 +42,7 @@ VALIDATE $? "nginx enabled"
 systemctl start nginx &>>$LOGFILE
 VALIDATE $? "starting nginx"
 
-Remove the default content that web server is serving.
+#Remove the default content that web server is serving.
 
 rm -rf /usr/share/nginx/html/* &>>$LOGFILE
 

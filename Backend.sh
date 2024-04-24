@@ -4,7 +4,8 @@ USERID=$(id -u)
 TIME_STAMP=$(date +%F-%H-%M-%S)
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOGFILE=/tmp/$SCRIPT_NAME-$TIMESTAMP.log
-
+echo "Please enter DB password:"
+read  mysql_root_password
 
 R="\e[31m"
 G="\e[32m"
@@ -74,7 +75,7 @@ dnf install mysql -y &>>$LOGFILE
 VALIDATE $? "installation of mysql-client"
 
 #Load Schema
-mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
+mysql -h <172.31.84.211> -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
 
 #Restart the service &>>$LOGFILE
 systemctl restart backend
