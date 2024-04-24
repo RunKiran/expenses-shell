@@ -13,6 +13,7 @@ N="\e[0m"
 if [ $USERID -ne 0 ]
 then
     echo "you need root access to install packages"
+    exit 1
 fi
 
 VALIDATE(){
