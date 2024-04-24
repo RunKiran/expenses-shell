@@ -48,6 +48,7 @@ then
     VALIDATE $? "Creating expense user"
 else
     echo -e "Expense user already created...$Y SKIPPING $N"
+    exit 1
 fi
 
 mkdir /app &>>$LOGFILE
