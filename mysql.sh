@@ -14,6 +14,8 @@ if [ $USERID -ne 0 ]
 then
     echo "you need root access to install packages"
     exit 1
+else
+    echo "you are super user"    
 fi
 
 VALIDATE(){
