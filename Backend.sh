@@ -61,6 +61,9 @@ VALIDATE $? "extracting backend code"
 cd /app 
 npm install &>>$LOGFILE
 
+#coping backend file 
+cp /home/ec2-user/expenses-shell/backend.service /etc/systemd/system/backend.service &>>$LOGFILE
+
 VALIDATE $? "installation of nodejs dependencies"
 systemctl daemon-reload
 systemctl enable backend
@@ -73,6 +76,6 @@ VALIDATE $? "installation of mysql-client"
 #Load Schema
 mysql -h <MYSQL-SERVER-IPADDRESS> -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
 
-#Restart the service
+#Restart the service &>>$LOGFILE
 systemctl restart backend
 VALIDATE $? "restarting backend"
