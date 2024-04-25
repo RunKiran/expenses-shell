@@ -61,28 +61,38 @@ cd /app
 rm -rf /app/*
 unzip /tmp/backend.zip &>>$LOGFILE
 VALIDATE $? "extracting backend code"
-cd /app 
+ 
+
 npm install &>>$LOGFILE
+VALIDATE $? "installation of nodejs dependencies"
 
 #coping backend file 
 cp /home/ec2-user/expenses-shell/backend.service /etc/systemd/system/backend.service &>>$LOGFILE
-
-VALIDATE $? "installation of nodejs dependencies"
-systemctl daemon-reload
-
-VALIDATE $? "deamon-reloaded"
-systemctl enable backend.service
-VALIDATE $? "enabled backend"
-systemctl start backend.service
-VALIDATE $? "started backend"
+VALIDATE $? "Copy of backend service"
 
 # we need to install mysql client
 dnf install mysql -y &>>$LOGFILE
 VALIDATE $? "installation of mysql-client"
 
-#Load Schema
-mysql -h 172.31.18.249 -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
+systemctl daemon-reload
+VALIDATE $? "deamon-reloaded"
 
-#Restart the service &>>$LOGFILE
-systemctl restart backend.service
+systemctl enable backend.service
+VALIDATE $? "enabled backend"
+
+systemctl start backend.service
+VALIDATE $? "started backend"
+
+#Load Schema
+mysql -h db.mkaws.online -uroot -p${mysql_root_password} < /app/schema/backend.sql &>>$LOGFILE
+VALIDATE $? "dbrecords are updated"
+
+
+
+
+
+
+
+#Restart the service 
+systemctl restart backend.service &>>$LOGFILE
 VALIDATE $? "restarting backend"
